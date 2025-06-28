@@ -1,0 +1,2 @@
+# waqq
+🪷 - Neovim config
