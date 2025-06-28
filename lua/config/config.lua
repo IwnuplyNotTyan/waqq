@@ -1,0 +1,5 @@
+vim.o.clipboard = "unnamedplus"
+vim.o.syntax = "on"
+vim.g.maplocalleader = " "
+vim.g.mapleader = " "
+vim.opt.termguicolors = true
