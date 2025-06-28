@@ -4,4 +4,4 @@
 ## Instaling:
 ```bash
 git clone https://github.com/IwnuplyNotTyan/waqq.git ~/.config/nvim
-``
+
