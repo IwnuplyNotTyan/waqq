@@ -13,7 +13,6 @@ return {
         }
       }
     })
-    require("config.config")
   end
 }
 }

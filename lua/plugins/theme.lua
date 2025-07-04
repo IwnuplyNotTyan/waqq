@@ -27,31 +27,75 @@ return {
     })
     vim.cmd.colorscheme "kanagawa-dragon"
 	end},
-	{"folke/noice.nvim",
-  	event = "VeryLazy",
-  	opts = {},
-	config = function()
-		require("noice").setup({
-	lsp = {
-	 override = {
-      		["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-      		["vim.lsp.util.stylize_markdown"] = true,
-      	 },
-	},
-  	views = {
-  	    cmdline_popup = {
-  	      border = {
-  	        style = "none",
-  	        padding = { 2, 3 },
-  	      },
-  	      filter_options = {},
-  	      win_options = {
-  	        winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-  	      },
-  	    },
-  	  },
-  	})
-	end},
+{"folke/noice.nvim",
+  event = "VeryLazy",
+  opts = {},
+  config = function()
+    require("noice").setup({
+      lsp = {
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+        },
+      },
+      -- добавляем пресеты для лучшей интеграции с cmp
+      presets = {
+        bottom_search = true, -- использовать классический командный вид для поиска
+        command_palette = false, -- отключаем командную палитру в центре
+        long_message_to_split = true, -- длинные сообщения будут отправлены в split
+        inc_rename = false, -- включает поддержку inc-rename.nvim
+        lsp_doc_border = false,
+      },
+      views = {
+        cmdline_popup = {
+          position = {
+            row = "50%",
+            col = "50%",
+          },
+          border = {
+            style = "none",
+            padding = { 2, 3 },
+          },
+          filter_options = {},
+          win_options = {
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+          },
+        },
+        popupmenu = {
+          relative = "editor",
+          position = {
+            row = "100%",
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = 10,
+          },
+          border = {
+            style = "rounded",
+            padding = { 0, 1 },
+          },
+          win_options = {
+            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+          },
+        },
+      },
+      routes = {
+        {
+          filter = {
+            event = "msg_show",
+            any = {
+              { find = "%d+L, %d+B" },
+              { find = "; after #%d+" },
+              { find = "; before #%d+" },
+            },
+          },
+          view = "mini",
+        },
+      },
+    })
+  end,},
   	{"MunifTanjim/nui.nvim"},
    	{"rcarriga/nvim-notify"},
 	{'anuvyklack/animation.nvim',

@@ -10,16 +10,16 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Hotpot - Fennel
-local hotpot_path = vim.fn.stdpath("data") .. "/lazy/hotpot.nvim"
-if not vim.loop.fs_stat(hotpot_path) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none", "--single-branch",
-    "https://github.com/rktjmp/hotpot.nvim.git", hotpot_path
-  })
-end
-vim.opt.runtimepath:prepend(hotpot_path)
+--local hotpot_path = vim.fn.stdpath("data") .. "/lazy/hotpot.nvim"
+--if not vim.loop.fs_stat(hotpot_path) then
+--  vim.fn.system({
+--    "git", "clone", "--filter=blob:none", "--single-branch",
+--    "https://github.com/rktjmp/hotpot.nvim.git", hotpot_path
+--  })
+--end
+--vim.opt.runtimepath:prepend(hotpot_path)
 
-require("hotpot")
+--require("hotpot")
 
 require("config.config")		      -- Config
 require("config.keymaps")		      -- Keymaps
