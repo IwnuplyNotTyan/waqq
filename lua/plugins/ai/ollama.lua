@@ -1,8 +1,5 @@
 return {
   {
-    'Exafunction/codeium.vim',
-  },
-  {
     "nomnivore/ollama.nvim",
     opts = {
       serve = {

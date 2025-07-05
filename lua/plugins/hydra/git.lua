@@ -20,9 +20,9 @@ return {
       config = {
 	invoke_on_body = true,
         hint = {
-          position = 'bottom',
+          position = 'middle',
           show_name = false,
-	  focusable = true,
+	  focusable = false,
           float_opts = {
             border = 'none',
           },
