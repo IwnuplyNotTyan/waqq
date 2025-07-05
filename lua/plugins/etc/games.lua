@@ -1,3 +1,5 @@
 return {
-	{'rktjmp/playtime.nvim'},
+	{'rktjmp/playtime.nvim',
+	lazy = true,
+	cmd = "Playtime",},
 }
