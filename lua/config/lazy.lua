@@ -7,6 +7,8 @@ require("lazy").setup({
     { import = "plugins.ai"},    -- AI
     { import = "plugins.render"},-- Render Markdown, Norg
     { import = "plugins.git"},   -- Git
+    { import = "plugins.tool"},  -- Tools
+    { import = "plugins.etc"},   -- Etc
   },
   defaults = {
     lazy = false,

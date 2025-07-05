@@ -75,12 +75,12 @@ local modes = {
 }
 
 local indent = function()
-	return "" .. vim.api.nvim_get_option(0, "shiftwidth")
+	return "" .. vim.api.nvim_buf_get_option(0, "shiftwidth")
 end
 
 local lsp_progess = function()
 	msg = msg or "LS Inactive"
-	local buf_clients = vim.lsp.get_clients()
+	local buf_clients = vim.lsp.buf_get_clients()
 	if next(buf_clients) == nil then
 		if type(msg) == "boolean" or #msg == 0 then
 			return "LS Inactive"
