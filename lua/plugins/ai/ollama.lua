@@ -1,6 +1,8 @@
 return {
   {
     "nomnivore/ollama.nvim",
+    lazy = true,
+    cmd = { "Ollama" },
     opts = {
       serve = {
         on_start = true,

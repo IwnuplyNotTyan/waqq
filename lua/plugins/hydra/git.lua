@@ -1,7 +1,7 @@
 return {
   "nvimtools/hydra.nvim",
   dependencies = "lewis6991/gitsigns.nvim",
-  lazy = false,
+  lazy = true,
   keys = {
     { "<leader>g", desc = "Git Hydra" },
   },
