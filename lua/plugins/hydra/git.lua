@@ -14,7 +14,7 @@ return {
       mode = {'n','x'},
       body = '<leader>g',
       hint = [[
- _n_: next hunk   _s_: stage hunk    _r_: reset hunk
+ _n_: next hunk   _s_: stage hunk   _r_: reset hunk
  _p_: prev hunk   _u_: undo stage   _R_: reset buffer
  _b_: blame line  _d_: diff this    _q_: quit
       ]],
