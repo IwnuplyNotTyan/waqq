@@ -2,6 +2,10 @@ return {
   "nvim-telescope/telescope.nvim",
   lazy = true,
   cmd = "Telescope",
+  keys = {
+    { "m", "<cmd>Telescope buffers<cr>", desc = "Telescope" },
+ --   { "n", "<cmd>Telescope find_files<cr>", desc = "Telescope" },
+  },
   tag = "0.1.4",
   dependencies = { "nvim-lua/plenary.nvim" },
   config = function()

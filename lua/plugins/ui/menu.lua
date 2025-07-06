@@ -3,6 +3,7 @@ return {
   { 
     "nvzone/menu", 
     lazy = true,
+    dependencies = { "nvzone/volt" },
         keys = {
       {
         "<RightMouse>",
@@ -42,9 +43,17 @@ return {
               cmd = "%d",
               rtxt = "dc",
             },
-          }
+	    { name = "separator" },
+	    {
+	    name = "  Color Picker",
+	    cmd = function()
+	      require("minty.huefy").open()
+	    end,
+	  },      
+	}
+
           
-          require("menu").open(options, { mouse = true })
+          require("menu").open(options, { mouse = true, border = false, })
         end,
         desc = "Open Menu"
       }

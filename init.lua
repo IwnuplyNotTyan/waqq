@@ -22,7 +22,6 @@ vim.opt.rtp:prepend(lazypath)
 --require("hotpot")
 
 require("config.config")		      -- Config
-require("config.keymaps")		      -- Keymaps
 local ok, err = pcall(require, "config.lazy") -- Lazy
 if not ok then
   print("Error loading lazy config:", vim.inspect(err))

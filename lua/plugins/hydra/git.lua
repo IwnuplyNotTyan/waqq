@@ -14,15 +14,19 @@ return {
       mode = {'n','x'},
       body = '<leader>g',
       hint = [[
+
+             	      Git
+
  _n_: next hunk   _s_: stage hunk   _r_: reset hunk
  _p_: prev hunk   _u_: undo stage   _R_: reset buffer
  _b_: blame line  _d_: diff this    _q_: quit
-      ]],
+      
+ ]],
       config = {
 	invoke_on_body = true,
         hint = {
           position = 'middle',
-          show_name = false,
+          show_name = true,
 	  focusable = false,
           float_opts = {
             border = 'none',
