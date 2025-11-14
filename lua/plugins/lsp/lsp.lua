@@ -101,6 +101,8 @@ lspconfig.gopls.setup {
   },
 }
 
+lspconfig.basedpyright.setup{}
+
 -- 2. Nix
 lspconfig.nil_ls.setup {
   capabilities = capabilities,
@@ -211,6 +213,7 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
+-- Fennel
 require 'lspconfig.configs'.fennel_language_server = {
   default_config = {
     cmd = {'/usr/bin/fennel'},
@@ -231,6 +234,10 @@ require 'lspconfig.configs'.fennel_language_server = {
 }
 
 lspconfig.fennel_language_server.setup{}
+
+-- Yaml & Docker
+lspconfig.yamlls.setup{}
+lspconfig.dockerls.setup{}
 
 -- Add border to hover and signature help
 local handlers = {
