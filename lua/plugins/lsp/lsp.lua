@@ -213,6 +213,9 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
+-- Java
+lspconfig.jdtls.setup{}
+
 -- Fennel
 require 'lspconfig.configs'.fennel_language_server = {
   default_config = {

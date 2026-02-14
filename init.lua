@@ -21,6 +21,8 @@ vim.opt.rtp:prepend(lazypath)
 
 --require("hotpot")
 
+vim.keymap.set('t', '<C-w>', '<C-\\><C-n><C-w>', { noremap = true })
+
 require("config.config")		      -- Config
 local ok, err = pcall(require, "config.lazy") -- Lazy
 if not ok then
