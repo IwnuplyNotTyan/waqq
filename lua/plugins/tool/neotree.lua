@@ -4,7 +4,7 @@ return {
   lazy = true,
   cmd = "Neotree",
   keys = {
-    { "'", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
+    { "'", "<cmd>Neotree position=current<cr>", desc = "NeoTree" },
   },
   dependencies = {
     "nvim-lua/plenary.nvim",
