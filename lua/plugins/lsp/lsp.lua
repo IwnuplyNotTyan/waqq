@@ -101,6 +101,13 @@ lspconfig.gopls.setup {
   },
 }
 
+lspconfig.kotlin_language_server.setup {
+  cmd = { "kotlin-language-server" },
+  filetypes = { "kotlin" },
+  root_dir = lspconfig.util.root_pattern("build.gradle", "build.gradle.kts", ".git"),
+  settings = {}
+}
+
 lspconfig.basedpyright.setup{}
 
 -- 2. Nix
