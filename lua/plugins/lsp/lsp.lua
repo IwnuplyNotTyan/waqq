@@ -244,6 +244,7 @@ require 'lspconfig.configs'.fennel_language_server = {
   },
 }
 
+lspconfig.rubocop.setup{}
 
 -- Harper - Type Check
 require('lspconfig').harper_ls.setup {
