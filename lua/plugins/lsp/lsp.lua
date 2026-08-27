@@ -57,40 +57,54 @@ cmp.setup({
   })
 })
 
--- LSP settings
-local lspconfig = require('lspconfig')
+-- LSP settings (new vim.lsp.config / vim.lsp.enable API, see :help lspconfig-nvim-0.11)
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
--- Key mappings for LSP functionality
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local opts = { noremap = true, silent = true }
-  
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.format()<CR>', opts)
-end
+-- Apply the completion capabilities to every server by default
+vim.lsp.config('*', {
+  capabilities = capabilities,
+})
+
+-- Key mappings + per-client tweaks, applied once for any LSP client that attaches
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local bufnr = ev.buf
+    local opts = { noremap = true, silent = true, buffer = bufnr }
+
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+    vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+    vim.keymap.set('n', '<space>f', vim.lsp.buf.format, opts)
+
+    -- ts_ls: defer formatting to a dedicated formatter instead of the LSP itself
+    if client and client.name == 'ts_ls' then
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end
+  end,
+})
 
 -- Configure language servers
 -- 1. Golang
-lspconfig.gopls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
+vim.lsp.config('gopls', {
   settings = {
     gopls = {
       analyses = {
@@ -100,21 +114,19 @@ lspconfig.gopls.setup {
       staticcheck = true,
     },
   },
-}
+})
 
-lspconfig.kotlin_language_server.setup {
+vim.lsp.config('kotlin_language_server', {
   cmd = { "kotlin-language-server" },
   filetypes = { "kotlin" },
-  root_dir = lspconfig.util.root_pattern("build.gradle", "build.gradle.kts", ".git"),
-  settings = {}
-}
+  root_markers = { "build.gradle", "build.gradle.kts", ".git" },
+  settings = {},
+})
 
-lspconfig.basedpyright.setup{}
+vim.lsp.config('basedpyright', {})
 
 -- 2. Nix
-lspconfig.nil_ls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
+vim.lsp.config('nil_ls', {
   settings = {
     ['nil'] = {
       formatting = {
@@ -122,16 +134,11 @@ lspconfig.nil_ls.setup {
       },
     },
   },
-}
+})
 
 -- 3. TypeScript/JavaScript (for React as well)
-lspconfig.ts_ls.setup {
-  capabilities = capabilities,
-  on_attach = function(client, bufnr)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-    on_attach(client, bufnr)
-  end,
+-- (the formatting-provider override lives in the shared LspAttach autocmd above)
+vim.lsp.config('ts_ls', {
   settings = {
     typescript = {
       inlayHints = {
@@ -156,12 +163,10 @@ lspconfig.ts_ls.setup {
       }
     }
   }
-}
+})
 
 -- 4. ESLint
-lspconfig.eslint.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
+vim.lsp.config('eslint', {
   filetypes = {
     'javascript',
     'javascriptreact',
@@ -174,12 +179,10 @@ lspconfig.eslint.setup {
   settings = {
     workingDirectory = { mode = 'auto' },
   },
-}
+})
 
 -- 5. Lua
-lspconfig.lua_ls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
+vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
       runtime = {
@@ -197,20 +200,15 @@ lspconfig.lua_ls.setup {
       },
     },
   },
-}
+})
 
 -- HTML (for JSX/TSX)
-lspconfig.html.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
+vim.lsp.config('html', {
   filetypes = { "html", "javascriptreact", "typescriptreact" },
-}
+})
 
 -- CSS
-lspconfig.cssls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-}
+vim.lsp.config('cssls', {})
 
 -- Diagnostic configuration
 vim.diagnostic.config({
@@ -222,32 +220,29 @@ vim.diagnostic.config({
 })
 
 -- Java
-lspconfig.jdtls.setup{}
+vim.lsp.config('jdtls', {})
 
--- Fennel
-require 'lspconfig.configs'.fennel_language_server = {
-  default_config = {
-    cmd = {'/usr/bin/fennel'},
-    filetypes = {'fennel'},
-    single_file_support = true,
-    root_dir = lspconfig.util.root_pattern("fnl"),
-    settings = {
-      fennel = {
-        workspace = {
-          library = vim.api.nvim_list_runtime_paths(),
-        },
-        diagnostics = {
-          globals = {'vim'},
-        },
+-- Fennel (custom server, not one of lspconfig's built-in definitions)
+vim.lsp.config('fennel_language_server', {
+  cmd = {'/usr/bin/fennel'},
+  filetypes = {'fennel'},
+  root_markers = { "fnl" },
+  settings = {
+    fennel = {
+      workspace = {
+        library = vim.api.nvim_list_runtime_paths(),
+      },
+      diagnostics = {
+        globals = {'vim'},
       },
     },
   },
-}
+})
 
-lspconfig.rubocop.setup{}
+vim.lsp.config('rubocop', {})
 
 -- Harper - Type Check
-require('lspconfig').harper_ls.setup {
+vim.lsp.config('harper_ls', {
   settings = {
     ["harper-ls"] = {
       userDictPath = "",
@@ -279,18 +274,33 @@ require('lspconfig').harper_ls.setup {
       excludePatterns = {}
     }
   }
-}
-
-lspconfig.fennel_language_server.setup{}
+})
 
 -- Yaml & Docker
-lspconfig.yamlls.setup{}
-lspconfig.dockerls.setup{}
+vim.lsp.config('yamlls', {})
+vim.lsp.config('dockerls', {})
+
+-- Turn all of the above on
+vim.lsp.enable({
+  'gopls',
+  'kotlin_language_server',
+  'basedpyright',
+  'nil_ls',
+  'ts_ls',
+  'eslint',
+  'lua_ls',
+  'html',
+  'cssls',
+  'jdtls',
+  'fennel_language_server',
+  'rubocop',
+  'harper_ls',
+  'yamlls',
+  'dockerls',
+})
 
 -- Add border to hover and signature help
-local handlers = {
-  ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
-  ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" }),
-}
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
   	end},
 }
