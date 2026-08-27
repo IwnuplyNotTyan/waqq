@@ -19,8 +19,7 @@ return {
 
  _n_: next hunk   _s_: stage hunk   _r_: reset hunk
  _p_: prev hunk   _u_: undo stage   _R_: reset buffer
- _b_: blame line  _d_: diff this    _;_: LazyGit
- _B_: Blame Full 
+ _b_: blame line  _d_: diff this    _B_: Blame Full 
       
  ]],
       config = {
@@ -45,7 +44,7 @@ return {
         { 'b', gitsigns.blame_line, { desc = 'blame line' } },
         { 'B', function() gitsigns.blame_line{full=true} end, { desc = 'blame full' } },
         { 'd', gitsigns.diffthis, { desc = 'diff this' } },
-	{ ';', '<cmd>LazyGit<cr>', { desc = 'LazyGit' } },
+	--{ ';', '<cmd>LazyGit<cr>', { desc = 'LazyGit' } },
         { 'q', nil, { exit = true } },
         { '<Esc>', nil, { exit = true } },
       }
