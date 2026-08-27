@@ -4,10 +4,11 @@ return {
 require("mason").setup()
 require("mason-lspconfig").setup({
   ensure_installed = {
-    "gopls",        -- Go
+    --"gopls",        -- Go
+    "harper-ls"	      -- Type Check
     --"nil_ls",       -- Nix
-    --"ts_ls",     -- TypeScript/JavaScript
-    "lua_ls",       -- Lua
+    --"ts_ls",        -- TypeScript/JavaScript
+    --"lua_ls",       -- Lua
     --"html",         -- HTML
     --"cssls",        -- CSS
     --"eslint",       -- ESLint
@@ -241,6 +242,42 @@ require 'lspconfig.configs'.fennel_language_server = {
       },
     },
   },
+}
+
+
+-- Harper - Type Check
+require('lspconfig').harper_ls.setup {
+  settings = {
+    ["harper-ls"] = {
+      userDictPath = "",
+      workspaceDictPath = "",
+      fileDictPath = "",
+      linters = {
+        SpellCheck = true,
+        SpelledNumbers = false,
+        AnA = true,
+        SentenceCapitalization = true,
+        UnclosedQuotes = true,
+        WrongApostrophe = false,
+        LongSentences = true,
+        RepeatedWords = true,
+        Spaces = true,
+        CorrectNumberSuffix = true
+      },
+      codeActions = {
+        ForceStable = false
+      },
+      markdown = {
+        IgnoreLinkTitle = false
+      },
+      diagnosticSeverity = "hint",
+      isolateEnglish = false,
+      dialect = "American",
+      maxFileLength = 120000,
+      ignoredLintsPath = "",
+      excludePatterns = {}
+    }
+  }
 }
 
 lspconfig.fennel_language_server.setup{}
