@@ -5,7 +5,7 @@ require("mason").setup()
 require("mason-lspconfig").setup({
   ensure_installed = {
     --"gopls",        -- Go
-    "harper-ls"	      -- Type Check
+    "harper_ls"	      -- Type Check
     --"nil_ls",       -- Nix
     --"ts_ls",        -- TypeScript/JavaScript
     --"lua_ls",       -- Lua
